@@ -1,0 +1,98 @@
+meta-llama/Meta-Llama-3-8B-Instruct: 
+  prompt: |
+    <|start_header_id|>system<|end_header_id|>
+    {}<|eot_id|>
+    <|start_header_id|>user<|end_header_id|>
+    Question: {}<|eot_id|>
+    <|start_header_id|>assistant<|end_header_id|>
+  response: |
+    {}<|eot_id|>
+  peft_args: 
+    r: 4
+    lora_alpha: 16
+    target_modules: ["q_proj", "o_proj", "k_proj", "v_proj", "gate_proj"]
+    lora_dropout: 0.05
+    bias: none
+    task_type: CAUSAL_LM
+  training_args: 
+    warmup_ratio: 0.1
+    num_train_epochs: 3
+    learning_rate: !!float 3e-4
+    fp16: False
+    logging_steps: 10
+    optim: adamw_torch
+    group_by_length: False
+    dataloader_drop_last: False
+    save_steps: 400
+    save_total_limit: 3
+
+EleutherAI/pythia-70m-deduped:
+  prompt: |
+    ### System:
+    {}<|endoftext|>
+    ### User:
+    {}<|endoftext|>
+    ### Assistant:
+  response: |
+    {}<|endoftext|>
+  peft_args: 
+    r: 4
+    lora_alpha: 16
+    target_modules: ['dense', 'dense_4h_to_h', 'dense_h_to_4h', 'query_key_value']
+    lora_dropout: 0.05
+    bias: none
+    task_type: CAUSAL_LM
+  training_args: 
+    warmup_ratio: 0.1
+    num_train_epochs: 10
+    learning_rate: !!float 3e-4
+    fp16: False
+    logging_steps: 1
+    optim: adamw_torch
+    group_by_length: False
+    dataloader_drop_last: False
+    save_steps: 100
+    save_total_limit: 3
+  generation_config:
+    max_new_tokens: 200
+    do_sample: True
+    top_p: 0.9
+  
+facebook/opt-125m:
+  prompt: |
+    ### System:
+    {}</s>
+    ### User:
+    {}</s>
+    ### Assistant:
+  response: |
+    {}</s>
+
+# Seq2Seq model
+google/flan-t5-small:
+  prompt: |
+    ### System:
+    {}</s>
+    ### User:
+    {}</s>
+    ### Assistant:
+  response: |
+    {}</s>
+  peft_args: 
+    r: 4
+    lora_alpha: 16
+    target_modules: ['q','k','v']
+    lora_dropout: 0.05
+    bias: none
+    task_type: CAUSAL_LM
+  training_args: 
+    warmup_ratio: 0.1
+    num_train_epochs: 10
+    learning_rate: !!float 3e-4
+    fp16: False
+    logging_steps: 1
+    optim: adamw_torch
+    group_by_length: False
+    dataloader_drop_last: False
+    save_steps: 100
+    save_total_limit: 3
